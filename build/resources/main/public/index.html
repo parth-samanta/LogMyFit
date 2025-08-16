@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogMyFit - Fitness Tracker</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📊 LogMyFit</h1>
+        <p>Track Your Fitness Journey</p>
+    </div>
+
+    <!-- Authentication section -->
+    <div id="auth-section" class="auth-section">
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="showTab('login')">Login</button>
+            <button class="tab-btn" onclick="showTab('signup')">Sign Up</button>
+        </div>
+
+        <div id="login-tab" class="tab-content active">
+            <h2>Welcome Back!</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="login-username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+
+        <div id="signup-tab" class="tab-content">
+            <h2>Join LogMyFit!</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="signup-username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="signup-password" required>
+                </div>
+                <div class="form-group">
+                    <label>Email (optional):</label>
+                    <input type="email" id="signup-email">
+                </div>
+                <button type="submit" class="btn">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main app section -->
+    <div id="app-section" class="app-section hidden">
+        <div class="user-info">
+            <span id="current-user"></span>
+            <button class="btn btn-secondary" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="showAppTab('dashboard')">Dashboard</button>
+            <button class="tab-btn" onclick="showAppTab('log-activity')">Log Activity</button>
+            <button class="tab-btn" onclick="showAppTab('log-workout')">Log Workout</button>
+            <button class="tab-btn" onclick="showAppTab('goals')">Set Goals</button>
+            <button class="tab-btn" onclick="showAppTab('analytics')">Analytics</button>
+            <button class="tab-btn" onclick="showAppTab('history')">History</button>
+        </div>
+
+        <!-- Dashboard yab -->
+        <div id="dashboard-tab" class="tab-content active">
+            <h2>Today's Progress</h2>
+            <div id="progress-display" class="progress-card">
+                <p>Loading your progress...</p>
+            </div>
+
+            <!-- Progress Carts -->
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3>Today's Progress</h3>
+                    <canvas id="progress-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Macronutrient Breakdown</h3>
+                    <canvas id="macro-chart"></canvas>
+                </div>
+            </div>
+
+            <button class="btn" onclick="loadProgress()">Refresh Progress</button>
+        </div>
+
+        <!-- Log activity tab -->
+        <div id="log-activity-tab" class="tab-content">
+            <h2>Log Your Daily Activity</h2>
+            <form id="activity-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Steps:</label>
+                        <input type="number" id="activity-steps" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Calories:</label>
+                        <input type="number" id="activity-calories" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Protein (g):</label>
+                        <input type="number" step="0.1" id="activity-protein" min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Carbs (g):</label>
+                        <input type="number" step="0.1" id="activity-carbs" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Fats (g):</label>
+                        <input type="number" step="0.1" id="activity-fats" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Activity Type:</label>
+                        <select id="activity-workout-type">
+                            <option value="">Select...</option>
+                            <option value="Cardio">Cardio</option>
+                            <option value="Strength">Strength Training</option>
+                            <option value="Yoga">Yoga</option>
+                            <option value="Walking">Walking</option>
+                            <option value="Running">Running</option>
+                            <option value="Swimming">Swimming</option>
+                            <option value="Cycling">Cycling</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notes:</label>
+                    <textarea id="activity-notes" rows="3" placeholder="Any additional notes about your activity or meals..."></textarea>
+                </div>
+                <button type="submit" class="btn">Log Activity</button>
+            </form>
+        </div>
+
+        <!-- Log Workout Tab -->
+        <div id="log-workout-tab" class="tab-content">
+            <h2>Log Your Workout</h2>
+            <form id="workout-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Workout Type:</label>
+                        <select id="workout-type" required>
+                            <option value="">Select...</option>
+                            <option value="Push Day">Push Day</option>
+                            <option value="Pull Day">Pull Day</option>
+                            <option value="Leg Day">Leg Day</option>
+                            <option value="Upper Body">Upper Body</option>
+                            <option value="Lower Body">Lower Body</option>
+                            <option value="Full Body">Full Body</option>
+                            <option value="Cardio">Cardio</option>
+                            <option value="Abs/Core">Abs/Core</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Exercise:</label>
+                        <input type="text" id="workout-exercise" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Sets:</label>
+                        <input type="number" id="workout-sets" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Reps:</label>
+                        <input type="number" id="workout-reps" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes:</label>
+                        <textarea id="workout-notes" rows="2" placeholder="Weight used, difficulty, rest time, etc."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn">Log Workout</button>
+            </form>
+        </div>
+
+        <!-- Goal tab -->
+        <div id="goals-tab" class="tab-content">
+            <h2>Set Your Daily Goals</h2>
+            <form id="goals-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Steps Goal:</label>
+                        <input type="number" id="goals-steps" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Calories Goal:</label>
+                        <input type="number" id="goals-calories" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Protein Goal (g):</label>
+                        <input type="number" step="0.1" id="goals-protein" min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Carbs Goal (g):</label>
+                        <input type="number" step="0.1" id="goals-carbs" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Fats Goal (g):</label>
+                        <input type="number" step="0.1" id="goals-fats" min="0">
+                    </div>
+                    <div></div>
+                </div>
+                <button type="submit" class="btn">Save Goals</button>
+            </form>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analytics-tab" class="tab-content">
+            <h2>Progress Analytics</h2>
+            <div class="analytics-controls">
+                <button class="btn" onclick="loadWeeklyAnalytics()">Load Weekly Trends</button>
+                <button class="btn btn-secondary" onclick="loadWorkoutAnalytics()">Workout Summary</button>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Weekly Steps Progress</h3>
+                    <canvas id="weekly-steps-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Weekly Calorie Intake</h3>
+                    <canvas id="weekly-calories-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Weekly Macro Distribution</h3>
+                    <canvas id="weekly-macro-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Workout Frequency</h3>
+                    <canvas id="workout-frequency-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div id="history-tab" class="tab-content">
+            <h2>Your Activity History</h2>
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="showHistoryTab('activity')">Activity Logs</button>
+                <button class="tab-btn" onclick="showHistoryTab('workouts')">Workout Logs</button>
+            </div>
+
+            <div id="activity-history" class="logs-container">
+                <button class="btn" onclick="loadActivityLogs()">Load Activity History</button>
+                <div id="activity-logs"></div>
+            </div>
+
+            <div id="workout-history" class="logs-container hidden">
+                <button class="btn" onclick="loadWorkoutLogs()">Load Workout History</button>
+                <div id="workout-logs"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="messages"></div>
+</div>
+
+<script src="./script.js"></script>
+</body>
+</html>
