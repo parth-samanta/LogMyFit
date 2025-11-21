@@ -69,11 +69,13 @@ This project demonstrates **REST API design, authentication security, DAO patter
 ---
 
 ##  Folder Structure
-├── src/main/java/... # Java backend (routes, DAO, models)
-├── src/main/resources/ # Static HTML/CSS/JS files
-├── data/ # SQLite database (NOT in GitHub)
+.
+├── src/main/java/...      # Java backend (routes, DAO, models)
+├── src/main/resources/    # Static HTML/CSS/JS files
+├── data/                  # SQLite database (NOT in GitHub)
 ├── README.md
 └── build.gradle
+
 ## Security 
 
 | Mechanism                | Implementation                              |
