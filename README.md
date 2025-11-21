@@ -38,23 +38,22 @@ This project demonstrates **REST API design, authentication security, DAO patter
 ---
 
 ##  System Architecture (3-Tier)
-┌─────────────────────────────────────┐
-│ Presentation Layer (Client) │
-│ HTML5 + CSS3 + JavaScript │
-│ Chart.js for Visualizations │
-└──────────────┬──────────────────────┘
-│ HTTP/REST API
-┌──────────────▼──────────────────────┐
-│ Business Logic Layer (Server) │
-│ Javalin Framework + Java │
-│ Authentication & Validation │
-│ API Endpoints & Routing │
-└──────────────┬──────────────────────┘
-│ JDBC
-┌──────────────▼──────────────────────┐
-│ Data Access Layer (Database) │
-│ SQLite Database + DAO Pattern │
-└─────────────────────────────────────┘
+Presentation Layer (Frontend)
+- HTML, CSS, JavaScript
+- Chart.js for data visualization
+
+↓ HTTP / REST API
+
+Business Logic Layer (Backend)
+- Java + Javalin Framework
+- API routing, validation, authentication
+
+↓ JDBC
+
+Data Access Layer (Database)
+- SQLite database
+- DAO pattern for CRUD operations
+- 
 ## Tech Stack
 
 | Layer | Technologies Used |
